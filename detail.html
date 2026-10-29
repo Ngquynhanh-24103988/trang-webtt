@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chi tiết bài viết - Tin tức 24H</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body data-page="detail">
+
+  <header class="site-header">
+    <div class="container">
+      <div class="top-bar">
+        <a href="index.html" class="logo-brand">
+          <span class="brand-title">TIN TỨC 24H</span>
+          <span class="brand-badge">DÂN TRÍ</span>
+        </a>
+        <div class="header-actions">
+          <span class="header-time" id="current-time"></span>
+          <a href="crawler.html" class="btn-crawler-nav"><i class="fa-solid fa-cloud-arrow-down"></i> Trang Crawler</a>
+        </div>
+      </div>
+      <nav class="main-nav">
+        <button class="menu-toggle" id="menu-toggle" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+        <ul class="nav-menu" id="navbar-menu"></ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="detail-layout">
+      <article class="article-main" id="article-main-container">
+        <div class="breadcrumb">
+          <a href="index.html"><i class="fa-solid fa-house"></i> Trang chủ</a>
+          <i class="fa-solid fa-angle-right"></i>
+          <span id="breadcrumb-category">Chuyên mục</span>
+        </div>
+
+        <h1 class="article-title" id="article-title">Đang tải bài viết...</h1>
+
+        <div class="article-meta-bar">
+          <div>
+            <span><i class="fa-solid fa-folder-open"></i> <strong id="article-category"></strong></span> &bull;
+            <span><i class="fa-regular fa-clock"></i> <span id="article-published"></span></span>
+          </div>
+          <div><span><i class="fa-regular fa-user"></i> Tác giả: <strong id="article-author"></strong></span></div>
+        </div>
+
+        <div class="article-sapo" id="article-excerpt"></div>
+
+        <figure class="article-featured-image" id="article-image-wrap">
+          <img referrerpolicy="no-referrer" id="article-image" src="" alt="Ảnh bài viết">
+          <figcaption>Ảnh minh họa từ nguồn tin tức</figcaption>
+        </figure>
+
+        <div class="article-content-body" id="article-content"></div>
+        <div class="article-author-signature" id="article-signature"></div>
+
+        <div class="original-link-box">
+          <i class="fa-solid fa-link"></i> Nguồn bài viết gốc:
+          <a id="article-original-url" href="#" target="_blank"></a>
+        </div>
+      </article>
+
+      <aside class="detail-sidebar">
+        <div class="sidebar-box">
+          <h3 class="sidebar-title"><i class="fa-solid fa-fire"></i> BÀI VIẾT LIÊN QUAN</h3>
+          <div id="related-posts-list"></div>
+        </div>
+        <div class="sidebar-box">
+          <h3 class="sidebar-title"><i class="fa-solid fa-bolt"></i> CÔNG CỤ NHANH</h3>
+          <a href="crawler.html" class="btn-primary" style="width:100%; justify-content:center;">
+            <i class="fa-solid fa-plus-circle"></i> Thêm bài mới
+          </a>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4>VỀ CHÚNG TÔI</h4>
+          <p>Trang thông tin điện tử tổng hợp tin tức trong nước và quốc tế nhanh chóng, chính xác, khách quan và đa chiều.</p>
+        </div>
+        <div class="footer-col">
+          <h4>LIÊN KẾT NHANH</h4>
+          <ul>
+            <li><a href="index.html"><i class="fa-solid fa-angle-right"></i> Trang chủ</a></li>
+            <li><a href="crawler.html"><i class="fa-solid fa-angle-right"></i> Công cụ Crawler</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>CHUYÊN MỤC CHÍNH</h4>
+          <ul id="footer-categories"></ul>
+        </div>
+        <div class="footer-col">
+          <h4>THÔNG TIN LIÊN HỆ</h4>
+          <p><i class="fa-solid fa-envelope"></i> contact@example.com</p>
+          <p><i class="fa-solid fa-location-dot"></i> Hà Nội, Việt Nam</p>
+        </div>
+      </div>
+      <div class="footer-bottom"><p>&copy; 2026 Bài tập lớn: Xây dựng website tin tức.</p></div>
+    </div>
+  </footer>
+
+  <script src="data/categories-data.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

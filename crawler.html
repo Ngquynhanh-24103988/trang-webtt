@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crawler tin tức Dân trí - Bóc tách dữ liệu tự động</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body data-page="crawler">
+
+  <header class="site-header">
+    <div class="container">
+      <div class="top-bar">
+        <a href="index.html" class="logo-brand">
+          <span class="brand-title">TIN TỨC 24H</span>
+          <span class="brand-badge">CRAWLER</span>
+        </a>
+        <div class="header-actions">
+          <a href="index.html" class="btn-crawler-nav"><i class="fa-solid fa-house"></i> Về trang chủ</a>
+        </div>
+      </div>
+      <nav class="main-nav">
+        <button class="menu-toggle" id="menu-toggle" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+        <ul class="nav-menu" id="navbar-menu"></ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container crawler-container">
+
+    <section class="crawler-card">
+      <div class="crawler-header-info">
+        <h2>Công cụ thu thập tin tức tự động (Web Crawler)</h2>
+        <p style="color:#64748b; font-size:14px;">
+          Nhập URL bài viết của <strong>Dân trí (dantri.com.vn)</strong> để trích xuất dữ liệu và lưu vào LocalStorage.
+          Cần chạy bằng <code>KHOI_DONG_WEB.cmd</code> hoặc <code>node server.cjs</code>.
+        </p>
+      </div>
+
+      <div id="status-alert" class="alert-box"></div>
+
+      <div class="input-group">
+        <input type="url" id="crawl-url-input" class="input-url"
+               placeholder="Dán URL bài viết Dân trí, ví dụ: https://dantri.com.vn/thoi-su/ten-bai-viet-20261021174907326.htm">
+        <button id="btn-crawl" class="btn-primary">
+          <span id="btn-crawl-text"><i class="fa-solid fa-download"></i> Lấy nội dung (Crawl)</span>
+        </button>
+      </div>
+
+      <div id="result-container" style="display:none;">
+        <hr style="border:0; border-top:1px solid #e2e8f0; margin:24px 0;">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:14px;">
+          <h3><i class="fa-solid fa-circle-check" style="color:#22c55e;"></i> Kết quả trích xuất</h3>
+          <button id="btn-save" class="btn-success"><i class="fa-solid fa-floppy-disk"></i> Lưu bài viết vào LocalStorage</button>
+        </div>
+
+        <div class="preview-box">
+          <h4 style="font-size:15px; color:#475569; margin-bottom:12px;"><i class="fa-solid fa-eye"></i> Xem trước:</h4>
+          <div class="preview-row">
+            <img referrerpolicy="no-referrer" id="preview-image" src="" alt="Ảnh">
+            <div style="flex:1; min-width:0;">
+              <span id="preview-category" class="post-badge"></span>
+              <h3 id="preview-title" style="font-size:17px; margin:6px 0;"></h3>
+              <p id="preview-excerpt" style="font-size:13.5px; color:#555; margin-bottom:8px;"></p>
+              <div style="font-size:12px; color:#888;">
+                <span id="preview-author"></span> &bull; <span id="preview-date"></span> &bull;
+                <span id="preview-id" style="font-family:monospace;"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:20px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <label style="font-weight:600; font-size:14px;"><i class="fa-solid fa-code"></i> Dữ liệu JSON chuẩn hóa:</label>
+            <button class="btn-sample" id="btn-copy-json"><i class="fa-regular fa-copy"></i> Sao chép JSON</button>
+          </div>
+          <pre class="code-box" id="json-output"></pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="crawler-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;">
+        <h3><i class="fa-solid fa-database"></i> Bài viết trong LocalStorage (<span id="stored-count">0</span> bài)</h3>
+        <button id="btn-reset-storage" class="btn-sample" style="color:#dc2626;">
+          <i class="fa-solid fa-rotate-left"></i> Khôi phục dữ liệu gốc
+        </button>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="table-posts">
+          <thead>
+            <tr>
+              <th style="width:150px;">Mã (ID)</th>
+              <th>Tiêu đề bài viết</th>
+              <th style="width:120px;">Chuyên mục</th>
+              <th style="width:130px;">Thời gian</th>
+              <th style="width:140px;">Thao tác</th>
+            </tr>
+          </thead>
+          <tbody id="storage-posts-body"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom" style="margin-top:0; border-top:0;"><p>&copy; 2026 Bài tập lớn: Xây dựng website tin tức.</p></div>
+    </div>
+  </footer>
+
+  <script src="data/categories-data.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/crawler.js"></script>
+  <script>
+    let currentCrawledPost = null;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      await StorageService.init();
+      renderStoredPostsTable();
+      document.getElementById('btn-crawl').addEventListener('click', handleCrawl);
+      document.getElementById('btn-save').addEventListener('click', handleSave);
+      document.getElementById('btn-reset-storage').addEventListener('click', handleReset);
+      document.getElementById('btn-copy-json').addEventListener('click', copyJson);
+      document.getElementById('crawl-url-input').addEventListener('keydown', e => { if (e.key === 'Enter') handleCrawl(); });
+      document.getElementById('storage-posts-body').addEventListener('click', e => {
+        const btn = e.target.closest('[data-delete-id]');
+        if (btn) deletePost(btn.dataset.deleteId);
+      });
+      if (location.protocol === 'file:') {
+        showAlert('<i class="fa-solid fa-triangle-exclamation"></i> Bạn đang mở file trực tiếp. Hãy chạy <b>KHOI_DONG_WEB.cmd</b> (hoặc <code>node server.cjs</code>) rồi vào <b>http://127.0.0.1:8080</b> để dùng được chức năng crawl.', 'error');
+      }
+    });
+
+    function showAlert(html, type) {
+      const el = document.getElementById('status-alert');
+      el.className = 'alert-box alert-' + (type || 'info');
+      el.innerHTML = html;
+      el.style.display = 'block';
+    }
+
+    async function handleCrawl() {
+      const url = document.getElementById('crawl-url-input').value.trim();
+      const btn = document.getElementById('btn-crawl');
+      const btnText = document.getElementById('btn-crawl-text');
+      if (!url) return showAlert('<i class="fa-solid fa-triangle-exclamation"></i> Vui lòng nhập URL bài viết Dân trí.', 'error');
+
+      currentCrawledPost = null;
+      document.getElementById('result-container').style.display = 'none';
+      document.getElementById('status-alert').style.display = 'none';
+      btn.disabled = true;
+      btnText.innerHTML = '<span class="spinner"></span> Đang tải và bóc tách...';
+
+      try {
+        const post = await crawlDantriPost(url);
+        currentCrawledPost = post;
+        const img = document.getElementById('preview-image');
+        delete img.dataset.fallbackApplied;
+        img.src = post.image || FALLBACK_IMAGE;
+        document.getElementById('preview-category').textContent = post.category;
+        document.getElementById('preview-title').textContent = post.title;
+        document.getElementById('preview-excerpt').textContent = post.excerpt;
+        document.getElementById('preview-author').textContent = 'Tác giả: ' + post.author;
+        document.getElementById('preview-date').textContent = displayDate(post.publishedAt);
+        document.getElementById('preview-id').textContent = 'ID: ' + post.id;
+        document.getElementById('json-output').textContent = JSON.stringify(post, null, 2);
+        document.getElementById('result-container').style.display = 'block';
+        showAlert('<i class="fa-solid fa-circle-check"></i> Đã trích xuất bài viết. Bấm "Lưu" để đưa vào website.', 'success');
+      } catch (err) {
+        showAlert('<i class="fa-solid fa-circle-xmark"></i> Lỗi khi thu thập: ' + escapeHtml(err.message), 'error');
+      } finally {
+        btn.disabled = false;
+        btnText.innerHTML = '<i class="fa-solid fa-download"></i> Lấy nội dung (Crawl)';
+      }
+    }
+
+    function handleSave() {
+      if (!currentCrawledPost) return;
+      StorageService.savePost(currentCrawledPost);
+      showAlert('<i class="fa-solid fa-circle-check"></i> <strong>Đã lưu bài viết.</strong> Mã: <code>' + escapeHtml(currentCrawledPost.id) +
+        '</code> <a href="' + postLink(currentCrawledPost) + '" target="_blank" style="font-weight:600; text-decoration:underline;">Xem bài trên website &rarr;</a>', 'success');
+      renderStoredPostsTable();
+    }
+
+    function renderStoredPostsTable() {
+      const posts = StorageService.getPosts();
+      document.getElementById('stored-count').textContent = posts.length;
+      const tbody = document.getElementById('storage-posts-body');
+      if (!posts.length) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:#888;">Chưa có bài viết nào.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = posts.map(p => `
+        <tr>
+          <td><code style="font-size:12px; color:#0d5cb6;">${escapeHtml(p.id)}</code></td>
+          <td><strong>${escapeHtml(p.title)}</strong></td>
+          <td><span class="post-badge" style="font-size:11px;">${escapeHtml(p.category)}</span></td>
+          <td style="font-size:12px; color:#666;">${escapeHtml(displayDate(p.publishedAt))}</td>
+          <td>
+            <a href="${postLink(p)}" target="_blank" class="btn-sm btn-sm-primary"><i class="fa-solid fa-arrow-up-right-from-square"></i> Xem</a>
+            <button class="btn-sm btn-sm-danger" data-delete-id="${escapeHtml(p.id)}"><i class="fa-solid fa-trash"></i> Xóa</button>
+          </td>
+        </tr>`).join('');
+    }
+
+    function deletePost(id) {
+      if (!confirm('Xóa bài viết có ID: ' + id + '?')) return;
+      StorageService.deletePost(id);
+      renderStoredPostsTable();
+      showAlert('Đã xóa bài viết ' + escapeHtml(id) + ' khỏi LocalStorage.', 'info');
+    }
+
+    async function handleReset() {
+      if (!confirm('Khôi phục danh sách bài viết về dữ liệu mẫu ban đầu? Các bài đã cào sẽ bị xóa.')) return;
+      await StorageService.resetDefault();
+      renderStoredPostsTable();
+      showAlert('Đã khôi phục dữ liệu ban đầu.', 'success');
+    }
+
+    function copyJson() {
+      const text = document.getElementById('json-output').textContent;
+      navigator.clipboard.writeText(text).then(() => alert('Đã sao chép JSON.'), () => alert('Không sao chép được.'));
+    }
+  </script>
+</body>
+</html>

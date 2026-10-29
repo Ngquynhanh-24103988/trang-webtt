@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Breaking news - Cập nhật liên tục</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body data-page="home">
+
+  <header class="site-header">
+    <div class="container">
+      <div class="top-bar">
+        <a href="index.html" class="logo-brand">
+          <span class="brand-title">BREAKING NEWS</span>
+          <span class="brand-badge">DÂN TRÍ</span>
+        </a>
+        <div class="header-actions">
+          <span class="header-time" id="current-time"></span>
+          <span class="header-weather">☼28°C</span>
+          <a href="crawler.html" class="btn-crawler-nav"><i class="fa-solid fa-cloud-arrow-down"></i> Trang Crawler</a>
+        </div>
+      </div>
+      <nav class="main-nav">
+        <button class="menu-toggle" id="menu-toggle" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+        <ul class="nav-menu" id="navbar-menu"></ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="category-header">
+      <h1 class="category-title" id="page-category-title">TIN MỚI NHẤT</h1>
+      <span class="post-count-badge" id="post-count-badge">Đang tải...</span>
+    </div>
+
+    <!-- 1 bài lớn bên trái + 2 bài nhỏ bên phải -->
+    <section class="top-news-section" id="top-news-section">
+      <div class="featured-post" id="featured-post-container"></div>
+      <div class="right-small-posts" id="right-small-container"></div>
+    </section>
+
+    <!-- Các bài còn lại, mới -> cũ -->
+    <section>
+      <div class="section-subheading"><i class="fa-solid fa-newspaper"></i> Danh sách bài viết tiếp theo</div>
+      <div class="news-vertical-list" id="remaining-posts-container"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4>BREAKING NEWS</h4>
+          <p>Trang thông tin điện tử tổng hợp tin tức trong nước và quốc tế nhanh chóng, chính xác, khách quan và đa chiều.</p>
+          <p>Hệ thống hỗ trợ bóc tách bài báo tự động từ Dân trí.</p>
+        </div>
+        <div class="footer-col">
+          <h4>LIÊN KẾT NHANH</h4>
+          <ul>
+            <li><a href="index.html"><i class="fa-solid fa-angle-right"></i> Trang chủ</a></li>
+            <li><a href="index.html?category=the-gioi"><i class="fa-solid fa-angle-right"></i> Tin thế giới</a></li>
+            <li><a href="index.html?category=thoi-su"><i class="fa-solid fa-angle-right"></i> Tin thời sự</a></li>
+            <li><a href="crawler.html"><i class="fa-solid fa-angle-right"></i> Công cụ Crawler</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>CHUYÊN MỤC CHÍNH</h4>
+          <ul id="footer-categories"></ul>
+        </div>
+        <div class="footer-col">
+          <h4>THÔNG TIN LIÊN HỆ</h4>
+          <p><i class="fa-solid fa-envelope"></i> 24103988@st.phenikaa-uni.edu.vn</p>
+          <p><i class="fa-solid fa-location-dot"></i> Hà Nội, Việt Nam</p>
+          <p><i class="fa-solid fa-phone"></i> Liên hệ quảng cáo: 0961219651</p>
+          <div class="social-links">
+            <a href="https://www.facebook.com/anhnguyen.quynh.92754/" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Facebook">f</a>
+            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="YouTube">▶</a>
+            <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="TikTok">♪</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom"><p>&copy; 2026 Bài tập lớn: Xây dựng website tin tức.</p></div>
+    </div>
+  </footer>
+
+  <script src="data/categories-data.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

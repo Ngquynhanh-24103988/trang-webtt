@@ -1,0 +1,10 @@
+{
+  "name": "web-tin-tuc-local",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Website tin tức kiểu Dân trí + công cụ crawler (bài tập lớn)",
+  "scripts": {
+    "start": "node server.cjs"
+  },
+  "engines": { "node": ">=22" }
+}
